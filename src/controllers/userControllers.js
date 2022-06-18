@@ -73,7 +73,7 @@ controller.loginUser = async (req, resp) => {
 
         const token = jwt.sign(user.toJSON(), process.env.TOKEN_SECRET)
         resp.header("auth-token", token)
-        resp.status(200).json({ success: "Logado com sucesso!" })
+        resp.status(200).json({ success: "Logado com sucesso!", token })
     } catch (err) {
         resp.status(500).json({ error: "Ocorreu um erro ao efetuar o login" })
     }
