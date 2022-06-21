@@ -109,13 +109,23 @@ controller.updateMe = async (req, resp) => {
     const { email } = jwt.verify(authToken, process.env.TOKEN_SECRET)
 
     const data = req.body
-
     const { error } = updateUserValidator.validate(data)
 
     if (error) {
         const { message } = error.details[0]
         resp.status(400).json({ error: message })
         return
+    }
+    if (data.email && data.email !== email) {
+        try {
+            const userExists = await UserModel.findOne({ email: data.email })
+            if (userExists) {
+                resp.status(400).json({ error: 'Email já cadastrado' })
+                return
+            }
+        } catch (err) {
+            resp.status(500).json({ error: "Ocorreu um ero ao atualizar o usuário" })
+        }
     }
 
     try {
@@ -146,7 +156,7 @@ controller.updateAvatar = async (req, resp) => {
             const path = req.file.path
             const { secure_url } = await cloudinary.uploader.upload(path)
             await UserModel.findOneAndUpdate({ email }, { avatar: secure_url }, { new: false })
-            resp.status(200).json({ success: "Imagem de perfil atualizada com sucesso" })
+            resp.status(200).json({ success: "Imagem de perfil atualizada com sucesso", image: secure_url })
 
         } catch (err) {
             console.log(err)

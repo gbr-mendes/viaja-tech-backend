@@ -108,6 +108,14 @@ validators.updateUserValidator = Joi.object({
             'string.min': 'O campo nome precisa de no mínimo 2 caracteres',
             'string.max': 'O campo nome pode ter no máximo 50 caracteres',
         }),
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            'string.empty': 'O campo email é obrigatório',
+            'any.required': 'O campo email é obrigatório',
+            'string.email': 'Por favor, informe um email válido'
+        }),
     phone: Joi.string()
         .min(14)
         .max(15)
