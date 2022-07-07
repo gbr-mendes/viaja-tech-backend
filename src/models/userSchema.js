@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: String,
         default: ""
+    },
+    notfications: {
+        type: Boolean,
+        default: true
     }
 })
 
