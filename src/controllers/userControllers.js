@@ -79,6 +79,10 @@ controller.loginUser = async (req, resp) => {
     }
 }
 
+controller.verifyToken = async (req, resp) => {
+    resp.status(200).json({ "sucesso": "Acesso autorizado" })
+}
+
 controller.getMe = async (req, resp) => {
     const authToken = req.header('auth-token')
     const { email } = jwt.decode(authToken)
