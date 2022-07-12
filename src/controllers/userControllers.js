@@ -59,7 +59,7 @@ controller.loginUser = async (req, resp) => {
 
     try {
         if (!await userUtils.emailAlreadyRegistered(email)) {
-            resp.status(400).json({ error: "Usuário ou senha inválidos" })
+            resp.status(401).json({ error: "Usuário ou senha inválidos" })
             return
         }
 
@@ -67,7 +67,7 @@ controller.loginUser = async (req, resp) => {
 
         const validPass = await bcrypt.compare(data.password, user.password)
         if (!validPass) {
-            resp.status(400).json({ error: "Usuário ou senha inválidos" })
+            resp.status(401).json({ error: "Usuário ou senha inválidos" })
             return
         }
 
