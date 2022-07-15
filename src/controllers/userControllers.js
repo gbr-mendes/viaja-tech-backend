@@ -77,7 +77,6 @@ controller.loginUser = async (req, resp) => {
         }
 
         const token = jwt.sign(user.toJSON(), process.env.TOKEN_SECRET)
-        resp.header("auth-token", token)
         resp.status(200).json({ success: "Logado com sucesso!", token })
     } catch (err) {
         resp.status(500).json({ error: "Ocorreu um erro ao efetuar o login" })
@@ -89,8 +88,8 @@ controller.verifyToken = async (req, resp) => {
 }
 
 controller.getMe = async (req, resp) => {
-    const authToken = req.header('auth-token')
-    const { email } = jwt.decode(authToken)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.decode(token)
 
     try {
         const user = await UserModel.findOne({ email }).select([
@@ -115,8 +114,8 @@ controller.getMe = async (req, resp) => {
 }
 
 controller.updateMe = async (req, resp) => {
-    const authToken = req.header("auth-token")
-    const { email } = jwt.verify(authToken, process.env.TOKEN_SECRET)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.verify(token, process.env.TOKEN_SECRET)
 
     const data = req.body
     const { error } = updateUserValidator.validate(data)
@@ -159,8 +158,8 @@ controller.updateMe = async (req, resp) => {
 }
 
 controller.updateAvatar = async (req, resp) => {
-    const authToken = req.header('auth-token')
-    const { email } = jwt.verify(authToken, process.env.TOKEN_SECRET)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.verify(token, process.env.TOKEN_SECRET)
     if (req.file) {
         try {
             const path = req.file.path

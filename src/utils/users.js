@@ -35,4 +35,10 @@ utils.getUserInfoByRole = async (user) => {
     return payload
 }
 
+utils.getToken = (req) => {
+    const { authorization } = req.headers
+    const token = authorization.split(' ')[1]
+    return token
+}
+
 module.exports = utils
