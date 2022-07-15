@@ -1,6 +1,8 @@
 const { createUserValidator } = require('../validators/userValidator')
 const { createEmployeeValidator } = require('../validators/employeeValidator')
 
+const { emailAlreadyRegistered, cpfAlreadyRegistered } = require('../utils/users')
+
 const userSchema = require('../models/userSchema')
 const employeeSchema = require('../models/employeeSchema')
 
@@ -29,6 +31,14 @@ controller.createEmployee = async (req, resp) => {
 
     if (userInfoError) {
         return resp.status(400).json({ error: userInfoError.details[0].message })
+    }
+
+    const { email, cpf } = userInfo
+    if (await emailAlreadyRegistered(email)) {
+        return resp.status(400).json({ error: "Email já cadastrado" })
+    }
+    if (await cpfAlreadyRegistered(cpf)) {
+        return resp.status(400).json({ error: "CPF já cadastrado" })
     }
 
     try {
