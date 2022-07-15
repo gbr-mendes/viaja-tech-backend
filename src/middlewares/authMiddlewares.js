@@ -4,16 +4,14 @@ const UserModel = require('../models/userSchema')
 const middlewares = {}
 
 middlewares.authenticationRequired = (req, resp, next) => {
-    const authToken = req.header('auth-token')
-    if (!authToken) {
-        resp.status(401).send({ error: 'Autenticação requerida' })
-        return
+    const { authorization } = req.headers
+    if (!authorization) {
+        return resp.status(401).send({ error: 'Autenticação requerida' })
     }
-
-    jwt.verify(authToken, process.env.TOKEN_SECRET, function (err, decoded) {
+    const token = authorization.split(" ")[1]
+    jwt.verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
         if (err) {
-            resp.status(401).send({ error: 'Token inválido.' });
-            return
+            return resp.status(401).send({ error: 'Token inválido.' });
         }
         next()
     })

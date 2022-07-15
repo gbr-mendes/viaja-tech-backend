@@ -1,13 +1,11 @@
 const jwt = require('jsonwebtoken')
 const middlewares = {}
 
-const checkRole = (roles, userRoles) => {
+const checkRole = (roles, userRole) => {
     let allowed = false
-    roles.map(role => {
-        if (userRoles.includes(role)) {
-            allowed = true
-        }
-    })
+    if (roles.includes(userRole)) {
+        allowed = true
+    }
     return allowed
 }
 
@@ -20,8 +18,8 @@ middlewares.verifyPermission = (roles) => {
             if (err) {
                 return resp.status(401).json({ error: 'Token inválido.' });
             }
-            const { roles: userRoles } = decoded
-            const allowed = checkRole(roles, userRoles)
+            const { role: userRole } = decoded
+            const allowed = checkRole(roles, userRole)
             if (allowed) {
                 return next()
             } else {
