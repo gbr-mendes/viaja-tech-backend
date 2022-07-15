@@ -4,17 +4,17 @@ const cloudinary = require("../utils/cloudinary")
 const UserModel = require('../models/userSchema')
 const utils = require('../utils/users')
 const userUtils = require('../utils/users')
-const manageRoles = require('../utils/manageRoles')
+const { createLead } = require('../utils/manageRoles')
 // User validators
 const { createUserValidator, loginValidator, updateUserValidator } = require('../validators/userValidator')
+const userSchema = require('../models/userSchema')
 
 const controller = {}
 
 controller.createUser = async (req, resp) => {
     const data = req.body
-    if (!data.roles.includes('isLead')) {
-        data.roles.push('isLead')
-    }
+    data.role = 'isLead'
+
     const { error } = createUserValidator.validate(data)
     if (error) {
         const { message } = error.details[0]
@@ -37,12 +37,18 @@ controller.createUser = async (req, resp) => {
     try {
         delete data.confirmPassword
         const user = await UserModel.create(data)
-        const { _id } = user
-        manageRoles.setUserRole(_id, data)
-        resp.status(201).json({ success: "Usuário criado com sucesso" })
+        if (user) {
+            const lead = await createLead(user._id.toString())
+            if (lead) {
+                return resp.status(201).json({ success: "Usuário criado com sucesso" })
+            } else {
+                await userSchema.findByIdAndDelete(user._id.toString())
+                return resp.status(500).json({ error: "Occorreu um erro inesperado. Tente novamente mais tarde" })
+            }
+        }
     } catch (err) {
-        resp.status(500).json({ error: "Ocorreu um erro ao cadastrar usuário. Tente novamente mais tarde" })
-        return
+        console.log(err)
+        return resp.status(500).json({ error: "Ocorreu um erro ao cadastrar usuário. Tente novamente mais tarde" })
     }
 }
 

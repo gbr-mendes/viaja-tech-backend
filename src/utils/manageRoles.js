@@ -4,7 +4,7 @@ const EmployeeModel = require('../models/employeeSchema')
 
 const utils = {}
 
-const createLead = async (userId) => {
+utils.createLead = async (userId) => {
     try {
         return await LeadModel.create({ user: userId })
     } catch (err) {
