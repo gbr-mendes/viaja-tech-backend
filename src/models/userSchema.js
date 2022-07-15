@@ -25,14 +25,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8
     },
-    roles: {
-        type: [
-            {
-                type: String,
-                enum: ['isLead', 'isClient', 'isSalesManager', 'isSiteAdmin', 'isAdmin']
-            }
-        ],
-        default: ['isLead']
+    role: {
+        type: String,
+        enum: ['isLead', 'isClient', 'isSalesManager', 'isSiteAdmin', 'isAdmin'],
+        default: 'isLead'
     },
     avatar: {
         type: String,
