@@ -70,12 +70,9 @@ validators.createUserValidator = Joi.object({
             'any.required': `Você precisa confirmar sua senha`
         }),
 
-    roles: Joi.array()
-        .required()
-        .min(1)
+    role: Joi.string()
         .messages({
-            'any.required': `O campo roles é obrigatório`,
-            'array.min': 'Ao menos uma regra deve ser informada',
+            'any.required': `O campo role é obrigatório`,
         }),
     salary: Joi.number()
 })
@@ -110,7 +107,6 @@ validators.updateUserValidator = Joi.object({
         }),
     email: Joi.string()
         .email()
-        .required()
         .messages({
             'string.empty': 'O campo email é obrigatório',
             'any.required': 'O campo email é obrigatório',

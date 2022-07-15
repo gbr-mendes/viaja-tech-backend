@@ -2,19 +2,18 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cloudinary = require("../utils/cloudinary")
 const UserModel = require('../models/userSchema')
-const utils = require('../utils/users')
 const userUtils = require('../utils/users')
-const manageRoles = require('../utils/manageRoles')
+const { createLead } = require('../utils/manageRoles')
 // User validators
 const { createUserValidator, loginValidator, updateUserValidator } = require('../validators/userValidator')
+const userSchema = require('../models/userSchema')
 
 const controller = {}
 
 controller.createUser = async (req, resp) => {
     const data = req.body
-    if (!data.roles.includes('isLead')) {
-        data.roles.push('isLead')
-    }
+    data.role = 'isLead'
+
     const { error } = createUserValidator.validate(data)
     if (error) {
         const { message } = error.details[0]
@@ -37,12 +36,18 @@ controller.createUser = async (req, resp) => {
     try {
         delete data.confirmPassword
         const user = await UserModel.create(data)
-        const { _id } = user
-        manageRoles.setUserRole(_id, data)
-        resp.status(201).json({ success: "Usuário criado com sucesso" })
+        if (user) {
+            const lead = await createLead(user._id.toString())
+            if (lead) {
+                return resp.status(201).json({ success: "Usuário criado com sucesso" })
+            } else {
+                await userSchema.findByIdAndDelete(user._id.toString())
+                return resp.status(500).json({ error: "Occorreu um erro inesperado. Tente novamente mais tarde" })
+            }
+        }
     } catch (err) {
-        resp.status(500).json({ error: "Ocorreu um erro ao cadastrar usuário. Tente novamente mais tarde" })
-        return
+        console.log(err)
+        return resp.status(500).json({ error: "Ocorreu um erro ao cadastrar usuário. Tente novamente mais tarde" })
     }
 }
 
@@ -72,7 +77,6 @@ controller.loginUser = async (req, resp) => {
         }
 
         const token = jwt.sign(user.toJSON(), process.env.TOKEN_SECRET)
-        resp.header("auth-token", token)
         resp.status(200).json({ success: "Logado com sucesso!", token })
     } catch (err) {
         resp.status(500).json({ error: "Ocorreu um erro ao efetuar o login" })
@@ -84,8 +88,8 @@ controller.verifyToken = async (req, resp) => {
 }
 
 controller.getMe = async (req, resp) => {
-    const authToken = req.header('auth-token')
-    const { email } = jwt.decode(authToken)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.decode(token)
 
     try {
         const user = await UserModel.findOne({ email }).select([
@@ -94,23 +98,24 @@ controller.getMe = async (req, resp) => {
             'email',
             'phone',
             'cpf',
-            'roles',
+            'role',
             'avatar'
         ])
         if (user) {
-            const userData = await utils.getUserInfoByRole(user)
+            const userData = await userUtils.getUserInfoByRole(user)
             resp.status(200).json(userData)
         } else {
             resp.status(400).json({ error: "Usuário não encontrado" })
         }
     } catch (err) {
+        console.log(err)
         resp.status(500).json({ error: "Ocorreu um erro ao recuperar os dados do usuário" })
     }
 }
 
 controller.updateMe = async (req, resp) => {
-    const authToken = req.header("auth-token")
-    const { email } = jwt.verify(authToken, process.env.TOKEN_SECRET)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.verify(token, process.env.TOKEN_SECRET)
 
     const data = req.body
     const { error } = updateUserValidator.validate(data)
@@ -143,18 +148,18 @@ controller.updateMe = async (req, resp) => {
         const updatedUser = await UserModel.findOneAndUpdate({ email }, data, {
             new: false,
             returnOriginal: false,
-            fields: { "_id": 1, "name": 1, "email": 1, "cpf": 1, "phone": 1, "roles": 1, "avatar": 1 }
+            fields: { "_id": 1, "name": 1, "email": 1, "cpf": 1, "phone": 1, "role": 1, "avatar": 1 }
         })
 
-        resp.status(200).json({ success: "User updated successfully", userInfo: updatedUser })
+        resp.status(200).json({ success: "Usuário atualizado com sucesso", userInfo: updatedUser })
     } catch (err) {
         resp.status(500).json({ error: "Ocorreu um ero ao atualizar o usuário" })
     }
 }
 
 controller.updateAvatar = async (req, resp) => {
-    const authToken = req.header('auth-token')
-    const { email } = jwt.verify(authToken, process.env.TOKEN_SECRET)
+    const token = userUtils.getToken(req)
+    const { email } = jwt.verify(token, process.env.TOKEN_SECRET)
     if (req.file) {
         try {
             const path = req.file.path
