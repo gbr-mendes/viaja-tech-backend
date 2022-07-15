@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cloudinary = require("../utils/cloudinary")
 const UserModel = require('../models/userSchema')
-const utils = require('../utils/users')
 const userUtils = require('../utils/users')
 const { createLead } = require('../utils/manageRoles')
 // User validators
@@ -104,7 +103,7 @@ controller.getMe = async (req, resp) => {
             'avatar'
         ])
         if (user) {
-            const userData = await utils.getUserInfoByRole(user)
+            const userData = await userUtils.getUserInfoByRole(user)
             resp.status(200).json(userData)
         } else {
             resp.status(400).json({ error: "Usuário não encontrado" })
