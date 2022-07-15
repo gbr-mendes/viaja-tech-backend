@@ -148,7 +148,7 @@ controller.updateMe = async (req, resp) => {
         const updatedUser = await UserModel.findOneAndUpdate({ email }, data, {
             new: false,
             returnOriginal: false,
-            fields: { "_id": 1, "name": 1, "email": 1, "cpf": 1, "phone": 1, "roles": 1, "avatar": 1 }
+            fields: { "_id": 1, "name": 1, "email": 1, "cpf": 1, "phone": 1, "role": 1, "avatar": 1 }
         })
 
         resp.status(200).json({ success: "Usuário atualizado com sucesso", userInfo: updatedUser })
