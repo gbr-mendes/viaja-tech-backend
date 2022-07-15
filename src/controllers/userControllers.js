@@ -151,7 +151,7 @@ controller.updateMe = async (req, resp) => {
             fields: { "_id": 1, "name": 1, "email": 1, "cpf": 1, "phone": 1, "roles": 1, "avatar": 1 }
         })
 
-        resp.status(200).json({ success: "User updated successfully", userInfo: updatedUser })
+        resp.status(200).json({ success: "Usuário atualizado com sucesso", userInfo: updatedUser })
     } catch (err) {
         resp.status(500).json({ error: "Ocorreu um ero ao atualizar o usuário" })
     }

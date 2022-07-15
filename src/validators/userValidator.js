@@ -107,7 +107,6 @@ validators.updateUserValidator = Joi.object({
         }),
     email: Joi.string()
         .email()
-        .required()
         .messages({
             'string.empty': 'O campo email é obrigatório',
             'any.required': 'O campo email é obrigatório',
