@@ -1,5 +1,5 @@
 const express = require('express')
-const { authenticationRequired, checkRolesSetOnUserCreation } = require('../middlewares/authMiddlewares')
+const { authenticationRequired } = require('../middlewares/authMiddlewares')
 const upload = require("../utils/multer")
 const router = express.Router()
 
