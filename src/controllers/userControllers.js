@@ -99,7 +99,7 @@ controller.getMe = async (req, resp) => {
             'email',
             'phone',
             'cpf',
-            'roles',
+            'role',
             'avatar'
         ])
         if (user) {
@@ -109,6 +109,7 @@ controller.getMe = async (req, resp) => {
             resp.status(400).json({ error: "Usuário não encontrado" })
         }
     } catch (err) {
+        console.log(err)
         resp.status(500).json({ error: "Ocorreu um erro ao recuperar os dados do usuário" })
     }
 }

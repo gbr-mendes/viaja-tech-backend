@@ -17,19 +17,18 @@ utils.cpfAlreadyRegistered = async (cpf) => {
 }
 
 utils.getUserInfoByRole = async (user) => {
-    const { roles, _id } = user
-
+    const { role, _id } = user
     const payload = {}
     payload.userInfo = user
-    if (roles.includes('isLead')) {
+    if (role == 'isLead') {
         payload.leadInfo = await LeadModel.findOne({ user: _id })
     }
 
-    if (roles.includes('isClient')) {
+    if (role == 'isClient') {
         payload.clientInfo = await ClientModel.findOne({ user: _id })
     }
 
-    if (roles.includes('isAdmin') || roles.includes('isSiteAdmin') || roles.includes('isSalesManager')) {
+    if (role == 'isAdmin' || role == 'isSiteAdmin' || role == 'isSalesManager') {
         payload.employeeInfo = await EmployeeModel.findOne({ user: _id })
     }
 
