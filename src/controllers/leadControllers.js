@@ -12,7 +12,7 @@ controller.getLeads = async (req, resp) => {
     page = Number.parseInt(page)
 
     try {
-        paginatedQuery(LeadModel, limit, page, queryBuilderToGetLeads, resp)
+        return paginatedQuery(LeadModel, limit, page, queryBuilderToGetLeads, resp)
     } catch (err) {
         console.log(err)
         resp.status(500).json({ error: "Ocorreu um erro ao recuperar as leads" })
