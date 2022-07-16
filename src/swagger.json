@@ -388,6 +388,43 @@
             }
         },
         "/api/v1/employee": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "description": "Number of elements for each query",
+                        "in": "query"
+                    },
+                    {
+                        "name": "page",
+                        "description": "Page to query the elements",
+                        "in": "query"
+                    }
+                ],
+                "description": "Retrive the registered employees",
+                "responses": {
+                    "200": {
+                        "description": "Success retriving the employees"
+                    },
+                    "401": {
+                        "description": "Invalid token or token not provided"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Employees"

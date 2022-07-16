@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const leadSchema = new mongoose.Schema({
-    user: {
+    userId: {
         type: mongoose.Types.ObjectId,
         required: true
     },

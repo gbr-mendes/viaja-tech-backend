@@ -1,7 +1,6 @@
 const LeadModel = require('../models/leadSchema')
 const UserModel = require('../models/userSchema')
-const { paginatedQuery } = require('../utils/queries')
-const { queryBuilderToGetLeads } = require('../utils/leads')
+const { paginatedQuery, queryBuilderBasedOnUser } = require('../utils/queries')
 
 const controller = {}
 
@@ -9,7 +8,7 @@ controller.getLeads = async (req, resp) => {
     let { limit, page } = req.query
 
     try {
-        return paginatedQuery(LeadModel, limit, page, resp, queryBuilder = queryBuilderToGetLeads, fields = ["-__v"])
+        return paginatedQuery(LeadModel, limit, page, resp, queryFields = ["-__v"], queryBuilder = queryBuilderBasedOnUser)
     } catch (err) {
         console.log(err)
         return resp.status(500).json({ error: "Ocorreu um erro ao recuperar as leads" })

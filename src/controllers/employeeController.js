@@ -1,8 +1,12 @@
+// validators
 const { createUserValidator } = require('../validators/userValidator')
 const { createEmployeeValidator } = require('../validators/employeeValidator')
 
+// utils
 const { emailAlreadyRegistered, cpfAlreadyRegistered } = require('../utils/users')
+const { paginatedQuery, queryBuilderBasedOnUser } = require('../utils/queries')
 
+// schemas
 const userSchema = require('../models/userSchema')
 const employeeSchema = require('../models/employeeSchema')
 
@@ -59,6 +63,17 @@ controller.createEmployee = async (req, resp) => {
     } catch (err) {
         console.log(err)
         return resp.status(500).json({ error: "Ocorreu um erro inesperado" })
+    }
+}
+
+controller.getEmployees = (req, resp) => {
+    const { limit, page } = req.query
+    const queryFields = ["-__v"]
+    try {
+        return paginatedQuery(employeeSchema, limit, page, resp, queryFields, queryBuilderBasedOnUser)
+    } catch (err) {
+        console.log(err)
+        return resp.status(500).json({ error: "An unexpected error has occured" })
     }
 }
 
