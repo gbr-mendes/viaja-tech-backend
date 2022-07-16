@@ -120,10 +120,6 @@ validators.updateUserValidator = Joi.object({
             'string.empty': 'O campo telefone é obrigatório',
             'string.min': 'O campo telefone precisa de no mínimo 14 caracteres',
             'string.max': 'O campo telefone pode ter no máximo 15 caracteres',
-        }),
-    avatar: Joi.string()
-        .messages({
-            'string.empty': 'O campo avatar não pode ficar vazio',
         })
 })
 

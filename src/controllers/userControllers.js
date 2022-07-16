@@ -24,12 +24,12 @@ controller.createUser = async (req, resp) => {
     const { email, cpf } = data
 
     if (await userUtils.emailAlreadyRegistered(email)) {
-        resp.status(400).json({ error: "Email já cadastrado" })
+        resp.status(409).json({ error: "Email já cadastrado" })
         return
     }
 
     if (await userUtils.cpfAlreadyRegistered(cpf)) {
-        resp.status(400).json({ error: "CPF já cadastrado" })
+        resp.status(409).json({ error: "CPF já cadastrado" })
         return
     }
 
@@ -105,7 +105,7 @@ controller.getMe = async (req, resp) => {
             const userData = await userUtils.getUserInfoByRole(user)
             resp.status(200).json(userData)
         } else {
-            resp.status(400).json({ error: "Usuário não encontrado" })
+            resp.status(404).json({ error: "Usuário não encontrado" })
         }
     } catch (err) {
         console.log(err)
@@ -129,7 +129,7 @@ controller.updateMe = async (req, resp) => {
         try {
             const userExists = await UserModel.findOne({ email: data.email })
             if (userExists) {
-                resp.status(400).json({ error: 'Email já cadastrado' })
+                resp.status(409).json({ error: 'Email já cadastrado' })
                 return
             }
         } catch (err) {
@@ -141,7 +141,7 @@ controller.updateMe = async (req, resp) => {
         const user = await UserModel.findOne({ email })
 
         if (!user) {
-            resp.status(400).json({ error: "Usuário não encontrado" })
+            resp.status(404).json({ error: "Usuário não encontrado" })
             return
         }
 
@@ -163,9 +163,14 @@ controller.updateAvatar = async (req, resp) => {
     if (req.file) {
         try {
             const path = req.file.path
-            const { secure_url } = await cloudinary.uploader.upload(path)
-            await UserModel.findOneAndUpdate({ email }, { avatar: secure_url }, { new: false })
-            resp.status(200).json({ success: "Imagem de perfil atualizada com sucesso", image: secure_url })
+            const user = await UserModel.find({ email })
+            if (user) {
+                const { secure_url } = await cloudinary.uploader.upload(path)
+                await UserModel.findOneAndUpdate({ email }, { avatar: secure_url }, { new: false })
+                return resp.status(200).json({ success: "Imagem de perfil atualizada com sucesso", image: secure_url })
+            } else {
+                return resp.status(404).json({ error: "User not found" })
+            }
 
         } catch (err) {
             console.log(err)
