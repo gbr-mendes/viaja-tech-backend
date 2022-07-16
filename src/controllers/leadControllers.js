@@ -8,9 +8,6 @@ const controller = {}
 controller.getLeads = async (req, resp) => {
     let { limit, page } = req.query
 
-    limit = Number.parseInt(limit)
-    page = Number.parseInt(page)
-
     try {
         return paginatedQuery(LeadModel, limit, page, resp, queryBuilder = queryBuilderToGetLeads, fields = ["-__v"])
     } catch (err) {

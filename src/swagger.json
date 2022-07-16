@@ -22,6 +22,10 @@
         {
             "name": "Users",
             "description": "Routes to deal with functions relative to the authenticated user"
+        },
+        {
+            "name": "Leads",
+            "description": "Routes to retrive leads"
         }
     ],
     "components": {
@@ -292,6 +296,44 @@
                     },
                     "404": {
                         "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/api/v1/leads": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Leads"
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "type": "number",
+                        "in": "query"
+                    },
+                    {
+                        "name": "page",
+                        "type": "number",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success getting the leads"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
                     },
                     "500": {
                         "description": "Unexpected error"
