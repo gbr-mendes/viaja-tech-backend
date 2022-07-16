@@ -14,8 +14,10 @@ const userRoutes = require('./routes/userRoutes')
 const leadRoutes = require('./routes/leadRoutes')
 const employeeRoutes = require('./routes/employeeRoutes')
 
-app.use('/users', userRoutes)
-app.use('/leads', leadRoutes)
-app.use('/employee', employeeRoutes)
+const URL_PREFIX = '/api/v1'
+
+app.use(`${URL_PREFIX}/users`, userRoutes)
+app.use(`${URL_PREFIX}/leads`, leadRoutes)
+app.use(`${URL_PREFIX}/employee`, employeeRoutes)
 
 module.exports = app
