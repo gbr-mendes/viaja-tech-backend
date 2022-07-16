@@ -387,6 +387,40 @@
                 }
             }
         },
+        "/api/v1/employee/{employeeId}": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "employeeId",
+                        "type": "string",
+                        "in": "path"
+                    }
+                ],
+                "description": "Retrive an especific employee",
+                "responses": {
+                    "200": {
+                        "description": "Success retriving the employee"
+                    },
+                    "401": {
+                        "description": "Invalid token or token not provided"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
         "/api/v1/employee": {
             "get": {
                 "tags": [
@@ -502,40 +536,6 @@
                     },
                     "401": {
                         "description": "Unauthenticated user"
-                    },
-                    "403": {
-                        "description": "User not allowed to perform this action"
-                    },
-                    "500": {
-                        "description": "Unexpected error"
-                    }
-                }
-            }
-        },
-        "/api/v1/employee/{employeeId}": {
-            "get": {
-                "tags": [
-                    "Employees"
-                ],
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "employeeId",
-                        "type": "string",
-                        "in": "path"
-                    }
-                ],
-                "description": "Retrive an especific employee",
-                "responses": {
-                    "200": {
-                        "description": "Success retriving the employee"
-                    },
-                    "401": {
-                        "description": "Invalid token or token not provided"
                     },
                     "403": {
                         "description": "User not allowed to perform this action"
