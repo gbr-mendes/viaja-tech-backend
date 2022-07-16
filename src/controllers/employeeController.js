@@ -12,6 +12,7 @@ const employeeSchema = require('../models/employeeSchema')
 
 const controller = {}
 
+// helper function
 const mapRoleByPosition = (position, userPayload) => {
     if (position == "Sales Manager") {
         userPayload["role"] = ["isSalesManager"]
@@ -23,6 +24,7 @@ const mapRoleByPosition = (position, userPayload) => {
 }
 
 
+// controllers definition
 controller.createEmployee = async (req, resp) => {
     const { userInfo, employeeInfo } = req.body
     const { position } = employeeInfo
@@ -74,6 +76,19 @@ controller.getEmployees = (req, resp) => {
     } catch (err) {
         console.log(err)
         return resp.status(500).json({ error: "An unexpected error has occured" })
+    }
+}
+
+controller.getEmployeeById = async (req, resp) => {
+    const { employeeId } = req.params
+    try {
+        const employee = await employeeSchema.findById(employeeId).select(["-__v"])
+        const { userId } = employee
+        const userData = await userSchema.findById(userId.toString()).select(["-__v", "-password", "-notfications", "-role"])
+        const payload = { ...employee.toObject(), ...userData.toObject() }
+        return resp.json(payload)
+    } catch (err) {
+        resp.status(500).json({ error: "An unexpected error has occured" })
     }
 }
 

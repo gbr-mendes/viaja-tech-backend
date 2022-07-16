@@ -1,9 +1,13 @@
+//  models
 const LeadModel = require('../models/leadSchema')
 const UserModel = require('../models/userSchema')
+
+// utils
 const { paginatedQuery, queryBuilderBasedOnUser } = require('../utils/queries')
 
 const controller = {}
 
+// controlers definition
 controller.getLeads = async (req, resp) => {
     let { limit, page } = req.query
 
@@ -22,8 +26,8 @@ controller.getLeadById = async (req, resp) => {
         if (!lead) {
             return resp.status(404).json({ error: 'Lead not found' })
         }
-        const { user } = lead
-        const userData = await UserModel.findById(user).select(['name', 'email', 'cpf', 'phone'])
+        const { userId } = lead
+        const userData = await UserModel.findById(userId).select(['name', 'email', 'cpf', 'phone'])
         const payload = { ...lead.toObject(), ...userData.toObject() }
         resp.status(200).json(payload)
     } catch (err) {

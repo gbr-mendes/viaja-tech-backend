@@ -1,9 +1,15 @@
 const express = require('express')
-const leadControllers = require('../controllers/leadControllers')
-const router = express.Router()
-const { verifyPermission } = require('../middlewares/permissionsMiddleware')
 
-router.get('/', verifyPermission(["isAdmin", "isSalesManager"]), leadControllers.getLeads)
-router.get('/:leadId', verifyPermission(["isAdmin", "isSalesManager"]), leadControllers.getLeadById)
+// controller
+const leadControllers = require('../controllers/leadControllers')
+
+// middlewares
+const { verifyPermission } = require('../middlewares/permissionsMiddleware')
+const { authenticationRequired } = require('../middlewares/authMiddlewares')
+
+const router = express.Router()
+// routes setup
+router.get('/', authenticationRequired, verifyPermission(["isAdmin", "isSalesManager"]), leadControllers.getLeads)
+router.get('/:leadId', authenticationRequired, verifyPermission(["isAdmin", "isSalesManager"]), leadControllers.getLeadById)
 
 module.exports = router

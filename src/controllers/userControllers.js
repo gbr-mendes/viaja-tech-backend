@@ -1,15 +1,22 @@
+// dependencies
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cloudinary = require("../utils/cloudinary")
+
+// models
 const UserModel = require('../models/userSchema')
 const userUtils = require('../utils/users')
+
+// utils
 const { createLead } = require('../utils/manageRoles')
+
 // User validators
 const { createUserValidator, loginValidator, updateUserValidator } = require('../validators/userValidator')
 const userSchema = require('../models/userSchema')
 
 const controller = {}
 
+// controllers definition
 controller.createUser = async (req, resp) => {
     const data = req.body
     data.role = 'isLead'
