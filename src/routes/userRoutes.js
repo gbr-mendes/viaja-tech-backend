@@ -1,10 +1,17 @@
 const express = require('express')
-const { authenticationRequired } = require('../middlewares/authMiddlewares')
-const upload = require("../utils/multer")
-const router = express.Router()
 
+// utils
+const upload = require("../utils/multer")
+
+// middlewares
+const { authenticationRequired } = require('../middlewares/authMiddlewares')
+
+// controller
 const userControllers = require('../controllers/userControllers')
 
+const router = express.Router()
+
+// routes setup
 router.post('/register', userControllers.createUser)
 router.post('/login', userControllers.loginUser)
 router.get('/verify-token', authenticationRequired, userControllers.verifyToken)

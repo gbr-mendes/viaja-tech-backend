@@ -1,13 +1,18 @@
+// validators
 const { createUserValidator } = require('../validators/userValidator')
 const { createEmployeeValidator } = require('../validators/employeeValidator')
 
+// utils
 const { emailAlreadyRegistered, cpfAlreadyRegistered } = require('../utils/users')
+const { paginatedQuery, queryBuilderBasedOnUser } = require('../utils/queries')
 
+// schemas
 const userSchema = require('../models/userSchema')
 const employeeSchema = require('../models/employeeSchema')
 
 const controller = {}
 
+// helper function
 const mapRoleByPosition = (position, userPayload) => {
     if (position == "Sales Manager") {
         userPayload["role"] = ["isSalesManager"]
@@ -19,6 +24,7 @@ const mapRoleByPosition = (position, userPayload) => {
 }
 
 
+// controllers definition
 controller.createEmployee = async (req, resp) => {
     const { userInfo, employeeInfo } = req.body
     const { position } = employeeInfo
@@ -59,6 +65,30 @@ controller.createEmployee = async (req, resp) => {
     } catch (err) {
         console.log(err)
         return resp.status(500).json({ error: "Ocorreu um erro inesperado" })
+    }
+}
+
+controller.getEmployees = (req, resp) => {
+    const { limit, page } = req.query
+    const queryFields = ["-__v"]
+    try {
+        return paginatedQuery(employeeSchema, limit, page, resp, queryFields, queryBuilderBasedOnUser)
+    } catch (err) {
+        console.log(err)
+        return resp.status(500).json({ error: "An unexpected error has occured" })
+    }
+}
+
+controller.getEmployeeById = async (req, resp) => {
+    const { employeeId } = req.params
+    try {
+        const employee = await employeeSchema.findById(employeeId).select(["-__v"])
+        const { userId } = employee
+        const userData = await userSchema.findById(userId.toString()).select(["-__v", "-password", "-notfications", "-role"])
+        const payload = { ...employee.toObject(), ...userData.toObject() }
+        return resp.json(payload)
+    } catch (err) {
+        resp.status(500).json({ error: "An unexpected error has occured" })
     }
 }
 
