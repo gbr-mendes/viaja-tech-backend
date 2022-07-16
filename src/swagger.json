@@ -25,7 +25,7 @@
         },
         {
             "name": "Leads",
-            "description": "Routes to retrive leads"
+            "description": "Routes to retrive leads information"
         }
     ],
     "components": {
@@ -310,6 +310,7 @@
                         "bearerAuth": []
                     }
                 ],
+                "description": "Get the registered leads. Allowed just to the classes <b>Admin</b> and <b>Sales Manager</b>",
                 "tags": [
                     "Leads"
                 ],
@@ -317,12 +318,14 @@
                     {
                         "name": "limit",
                         "type": "number",
-                        "in": "query"
+                        "in": "query",
+                        "description": "Number of elements for each query"
                     },
                     {
                         "name": "page",
                         "type": "number",
-                        "in": "query"
+                        "in": "query",
+                        "description": "Page to query the elements"
                     }
                 ],
                 "responses": {
@@ -334,6 +337,45 @@
                     },
                     "403": {
                         "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/api/v1/leads/{leadId}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "description": "Get the registered leads. Allowed just to the classes <b>Admin</b> and <b>Sales Manager</b>",
+                "tags": [
+                    "Leads"
+                ],
+                "parameters": [
+                    {
+                        "name": "leadId",
+                        "type": "string",
+                        "in": "path",
+                        "description": "ObjectId to get an especific lead",
+                        "required": "true"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success getting the lead"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "404": {
+                        "description": "Lead not found"
                     },
                     "500": {
                         "description": "Unexpected error"

@@ -17,12 +17,11 @@ controller.getLeads = async (req, resp) => {
 }
 
 controller.getLeadById = async (req, resp) => {
-    const { id } = req.params
+    const { leadId } = req.params
     try {
-        const lead = await LeadModel.findById(id)
+        const lead = await LeadModel.findById(leadId)
         if (!lead) {
-            resp.status(400).json({ error: 'Lead not found' })
-            return
+            return resp.status(404).json({ error: 'Lead not found' })
         }
         const { user } = lead
         const userData = await UserModel.findById(user).select(['name', 'email', 'cpf', 'phone'])
