@@ -26,6 +26,10 @@
         {
             "name": "Leads",
             "description": "Routes to retrive leads information"
+        },
+        {
+            "name": "Employees",
+            "description": "Routes to perform actions relative to employees"
         }
     ],
     "components": {
@@ -376,6 +380,94 @@
                     },
                     "404": {
                         "description": "Lead not found"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/api/v1/employee": {
+            "post": {
+                "tags": [
+                    "Employees"
+                ],
+                "description": "Route to create an employee. Only the class <b>Admin</b> is allowed to perform this action",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userInfo": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "default": "type the name of the user"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "default": "type a valid email"
+                                            },
+                                            "phone": {
+                                                "type": "string",
+                                                "default": "Type the phone number"
+                                            },
+                                            "cpf": {
+                                                "type": "string",
+                                                "default": "type a valid CPF"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "default": "password"
+                                            },
+                                            "confirmPassword": {
+                                                "type": "string",
+                                                "default": "password"
+                                            }
+                                        }
+                                    },
+                                    "employeeInfo": {
+                                        "type": "object",
+                                        "properties": {
+                                            "position": {
+                                                "type": "string",
+                                                "default": "General Manager",
+                                                "enum": [
+                                                    "General Manager",
+                                                    "Content Manager",
+                                                    "Sales Manager"
+                                                ]
+                                            },
+                                            "salary": {
+                                                "type": "number",
+                                                "default": 1500.00
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success registering employee"
+                    },
+                    "400": {
+                        "description": "Invalid Payload"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
                     },
                     "500": {
                         "description": "Unexpected error"
