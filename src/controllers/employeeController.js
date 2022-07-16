@@ -35,10 +35,10 @@ controller.createEmployee = async (req, resp) => {
 
     const { email, cpf } = userInfo
     if (await emailAlreadyRegistered(email)) {
-        return resp.status(400).json({ error: "Email já cadastrado" })
+        return resp.status(409).json({ error: "Email já cadastrado" })
     }
     if (await cpfAlreadyRegistered(cpf)) {
-        return resp.status(400).json({ error: "CPF já cadastrado" })
+        return resp.status(409).json({ error: "CPF já cadastrado" })
     }
 
     try {
