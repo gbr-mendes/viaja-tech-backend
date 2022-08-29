@@ -5,7 +5,7 @@ const utils = {}
 
 utils.createLead = async (userId) => {
     try {
-        return await LeadModel.create({ user: userId })
+        return await LeadModel.create({ userId })
     } catch (err) {
         console.log(err)
         await UserModel.findByIdAndDelete(userId)
