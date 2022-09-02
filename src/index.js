@@ -12,15 +12,17 @@ app.use(express.json())
 db.connect()
 
 // Routes
-const userRoutes = require('./routes/userRoutes')
-const leadRoutes = require('./routes/leadRoutes')
-const employeeRoutes = require('./routes/employeeRoutes')
+const userRoutes = require('./routes/userRoutes');
+const leadRoutes = require('./routes/leadRoutes');
+const employeeRoutes = require('./routes/employeeRoutes');
+const packagesRoutes = require('./routes/packageRoutes');
 
 const URL_PREFIX = '/api/v1'
 
-app.use(`${URL_PREFIX}/users`, userRoutes)
-app.use(`${URL_PREFIX}/leads`, leadRoutes)
-app.use(`${URL_PREFIX}/employee`, employeeRoutes)
-app.use(`${URL_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+app.use(`${URL_PREFIX}/users`, userRoutes);
+app.use(`${URL_PREFIX}/leads`, leadRoutes);
+app.use(`${URL_PREFIX}/employee`, employeeRoutes);
+app.use(`${URL_PREFIX}/packages`, packagesRoutes);
+app.use(`${URL_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 module.exports = app
