@@ -551,6 +551,57 @@
             }
         },
         "/api/v1/packages": {
+            "post": {
+                "tags": [
+                    "Packages"
+                ],
+                "description": "Add a new package",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title":{
+                                        "type": "string",
+                                        "default": "Title of the package"
+                                    },
+                                    "description":{
+                                        "type": "string",
+                                        "default": "descrtiption of the package"
+                                    },
+                                    "valuePerDay": {
+                                        "type": "number",
+                                        "default": 200.00
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success creating package"
+                    },
+                    "400": {
+                        "description": "Invalid Payload"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            },
             "get": {
                 "tags": [
                     "Packages"
@@ -589,6 +640,130 @@
                 }
             }
         
+        },
+        "/api/v1/packages/{packageId}": {
+            "get": {
+                "tags": [
+                    "Packages"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "packageId",
+                        "type": "string",
+                        "in": "path"
+                    }
+                ],
+                "description": "Retrive an especific package",
+                "responses": {
+                    "200": {
+                        "description": "Success retriving the package"
+                    },
+                    "401": {
+                        "description": "Invalid token or token not provided"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Packages"
+                ],
+                "description": "Update an especific package",
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "packageId",
+                        "type": "string",
+                        "in": "path"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title":{
+                                        "type": "string",
+                                        "default": "Title of the package"
+                                    },
+                                    "description":{
+                                        "type": "string",
+                                        "default": "descrtiption of the package"
+                                    },
+                                    "valuePerDay": {
+                                        "type": "number",
+                                        "default": 200.00
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success updating package"
+                    },
+                    "400": {
+                        "description": "Invalid Payload"
+                    },
+                    "401": {
+                        "description": "Unauthenticated user"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Packages"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "packageId",
+                        "type": "string",
+                        "in": "path"
+                    }
+                ],
+                "description": "delete an especific package",
+                "responses": {
+                    "200": {
+                        "description": "Success deleting the package"
+                    },
+                    "401": {
+                        "description": "Invalid token or token not provided"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
         }
     }
 }

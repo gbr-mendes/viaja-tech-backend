@@ -23,7 +23,9 @@ controler.createPackage = async (req, resp) => {
   try {
     const package = await PackageModel.create(data);
     if (package) {
-      return resp.json({ success: "Pacote adicionado com sucesso" });
+      return resp
+        .status(201)
+        .json({ success: "Pacote adicionado com sucesso" });
     }
     return resp
       .status(500)
