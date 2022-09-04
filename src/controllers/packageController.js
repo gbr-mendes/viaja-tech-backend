@@ -38,7 +38,14 @@ controler.getPackages = async (req, resp) => {
   const { limit, page } = req.query;
   const queryFields = ["-__v"];
   try {
-    return paginatedQuery(PackageModel, limit, page, resp, queryFields);
+    return paginatedQuery(
+      PackageModel,
+      "packages",
+      limit,
+      page,
+      resp,
+      queryFields
+    );
   } catch (err) {
     console.log(err);
     return resp.status(500).json({ error: "Ocorreu um erro inesperado" });

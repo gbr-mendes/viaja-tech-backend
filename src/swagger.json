@@ -30,6 +30,10 @@
         {
             "name": "Employees",
             "description": "Routes to perform actions relative to employees"
+        },
+        {
+            "name": "Packages",
+            "description": "Routes to perform actions relative to packages"
         }
     ],
     "components": {
@@ -545,6 +549,46 @@
                     }
                 }
             }
+        },
+        "/api/v1/packages": {
+            "get": {
+                "tags": [
+                    "Packages"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "description": "Number of elements for each query",
+                        "in": "query"
+                    },
+                    {
+                        "name": "page",
+                        "description": "Page to query the elements",
+                        "in": "query"
+                    }
+                ],
+                "description": "Retrive the registered packages",
+                "responses": {
+                    "200": {
+                        "description": "Success retriving packages"
+                    },
+                    "401": {
+                        "description": "Invalid token or token not provided"
+                    },
+                    "403": {
+                        "description": "User not allowed to perform this action"
+                    },
+                    "500": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        
         }
     }
 }
