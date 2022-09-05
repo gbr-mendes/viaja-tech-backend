@@ -1,20 +1,14 @@
-//  models
-const LeadModel = require("../models/leadSchema");
-const UserModel = require("../models/userSchema");
-
-// utils
-const { paginatedQuery, queryBuilderBasedOnUser } = require("../utils/queries");
+const ClientModel = require("../models/clientSchema");
 
 const controller = {};
 
-// controlers definition
-controller.getLeads = async (req, resp) => {
+controller.getClients = async (req, resp) => {
   let { limit, page } = req.query;
 
   try {
     return paginatedQuery(
-      LeadModel,
-      "leads",
+      ClientModel,
+      "clients",
       limit,
       page,
       resp,
@@ -29,14 +23,14 @@ controller.getLeads = async (req, resp) => {
   }
 };
 
-controller.getLeadById = async (req, resp) => {
-  const { leadId } = req.params;
+controller.getClientById = async (req, resp) => {
+  const { clientId } = req.params;
   try {
-    const lead = await LeadModel.findById(leadId);
-    if (!lead) {
-      return resp.status(404).json({ error: "Lead not found" });
+    const client = await LeadModel.findById(clientId);
+    if (!client) {
+      return resp.status(404).json({ error: "Client not found" });
     }
-    const { userId } = lead;
+    const { userId } = client;
     const userData = await UserModel.findById(userId).select([
       "name",
       "email",
@@ -47,7 +41,7 @@ controller.getLeadById = async (req, resp) => {
     resp.status(200).json(payload);
   } catch (err) {
     console.log(err);
-    resp.status(500).json({ error: "Ocorreu um erro inseperado" });
+    resp.status(500).json({ erro: "Ocorreu um erro inesperado" });
   }
 };
 
