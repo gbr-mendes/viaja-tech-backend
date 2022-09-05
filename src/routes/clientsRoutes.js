@@ -8,14 +8,14 @@ const { authenticationRequired } = require("../middlewares/authMiddlewares");
 const { verifyPermission } = require("../middlewares/permissionsMiddleware");
 
 router.get(
-  "/clients",
+  "/",
   authenticationRequired,
   verifyPermission(["isAdmin", "isSalesManager"]),
   controller.getClients
 );
 
 router.get(
-  "/clients/:clientId",
+  "/:clientId",
   authenticationRequired,
   verifyPermission(["isAdmin", "isSalesManager"]),
   controller.getClient
