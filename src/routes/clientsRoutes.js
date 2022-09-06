@@ -18,7 +18,7 @@ router.get(
   "/:clientId",
   authenticationRequired,
   verifyPermission(["isAdmin", "isSalesManager"]),
-  controller.getClient
+  controller.getClientById
 );
 
 module.exports = router;
