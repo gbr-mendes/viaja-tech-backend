@@ -18,7 +18,7 @@ const controller = {};
 // helper function
 const mapRoleByPosition = (position, userPayload) => {
   if (position == "Sales Manager") {
-    userPayload["role"] = ["isSalesManager"];
+    userPayload["role"] = "isSalesManager";
   } else if (position == "General Manager") {
     userPayload["role"] = "isAdmin";
   } else if (position == "Content Manager") {
