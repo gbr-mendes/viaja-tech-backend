@@ -1,6 +1,12 @@
 // validators
-const { createUserValidator } = require("../validators/userValidator");
-const { createEmployeeValidator } = require("../validators/employeeValidator");
+const {
+  createUserValidator,
+  updateUserValidator,
+} = require("../validators/userValidator");
+const {
+  createEmployeeValidator,
+  updateEmployeeValidator,
+} = require("../validators/employeeValidator");
 
 // utils
 const {
@@ -106,6 +112,91 @@ controller.getEmployeeById = async (req, resp) => {
     return resp.json(payload);
   } catch (err) {
     resp.status(500).json({ error: "An unexpected error has occured" });
+  }
+};
+
+controller.updateEmployee = async (req, resp) => {
+  const { employeeId } = req.params;
+  const employee = await employeeSchema.findById(employeeId);
+  if (!employee) {
+    return resp.status(400).json({ error: "Funcionário não encontrado" });
+  }
+  const { userId } = employee;
+
+  const { userInfo, employeeInfo } = req.body;
+  if (!userInfo || !employeeInfo) {
+    return resp.status(400).json({ error: "Payload inválida" });
+  }
+
+  const { position } = employeeInfo;
+  if (position) {
+    mapRoleByPosition(position, userInfo);
+  }
+
+  const { error: userInfoError } = updateUserValidator.validate(userInfo);
+  const { error: employeeInfoError } =
+    updateEmployeeValidator.validate(employeeInfo);
+
+  if (userInfoError) {
+    const { message } = userInfoError.details[0];
+    resp.status(400).json({ error: message });
+    return;
+  }
+  if (employeeInfoError) {
+    const { message } = employeeInfoError.details[0];
+    resp.status(400).json({ error: message });
+    return;
+  }
+
+  try {
+    const user = await userSchema.findById(userId);
+    if (!user) {
+      resp.status(400).json({ error: "Usuário não encontrado" });
+    }
+
+    if (userInfo.email && userInfo.email !== user.email) {
+      const userExists = await userSchema.findOne({ email: userInfo.email });
+      if (userExists) {
+        resp.status(409).json({ error: "Email já cadastrado" });
+        return;
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    return resp
+      .status(500)
+      .json({ error: "Ocorreu um erro ao atualizar o usuário" });
+  }
+
+  try {
+    const updatedUser = await userSchema.findByIdAndUpdate(userId, userInfo, {
+      new: false,
+      returnOriginal: false,
+      fields: {
+        _id: 1,
+        name: 1,
+        email: 1,
+        cpf: 1,
+        phone: 1,
+        role: 1,
+      },
+    });
+    const updatedEmployee = await employeeSchema.findByIdAndUpdate(
+      employeeId,
+      employeeInfo,
+      { new: false, returnOriginal: false }
+    );
+
+    resp.status(200).json({
+      success: "Funcionário atualizado com sucesso",
+      userInfo: updatedUser,
+      employeeInfo: updatedEmployee,
+    });
+  } catch (err) {
+    console.log(err);
+    return resp
+      .status(500)
+      .json({ error: "Ocorreu um erro ao atualizar o usuário" });
   }
 };
 

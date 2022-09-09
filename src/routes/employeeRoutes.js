@@ -27,5 +27,11 @@ router.get(
   verifyPermission(["isAdmin"]),
   controller.getEmployeeById
 );
+router.patch(
+  "/:employeeId",
+  authenticationRequired,
+  verifyPermission(["isAdmin"]),
+  controller.updateEmployee
+);
 
 module.exports = router;
