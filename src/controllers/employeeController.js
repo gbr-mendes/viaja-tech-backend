@@ -203,8 +203,8 @@ controller.updateEmployee = async (req, resp) => {
 
 controller.deleteEmployee = async (req, resp) => {
   const { employeeId } = req.params;
-  const { userId } = await employeeSchema.findById(employeeId);
   try {
+    const { userId } = await employeeSchema.findById(employeeId);
     if (userId) {
       deactivateUser(userId);
       resp.status(200).json({ success: "Funcionário deletado com sucesso" });
