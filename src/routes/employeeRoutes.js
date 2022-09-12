@@ -33,5 +33,11 @@ router.patch(
   verifyPermission(["isAdmin"]),
   controller.updateEmployee
 );
+router.delete(
+  "/:employeeId",
+  authenticationRequired,
+  verifyPermission(["isAdmin"]),
+  controller.deleteEmployee
+);
 
 module.exports = router;

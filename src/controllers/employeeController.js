@@ -12,6 +12,7 @@ const {
 const {
   emailAlreadyRegistered,
   cpfAlreadyRegistered,
+  deactivateUser,
 } = require("../utils/users");
 const { paginatedQuery, queryBuilderBasedOnUser } = require("../utils/queries");
 
@@ -197,6 +198,22 @@ controller.updateEmployee = async (req, resp) => {
     return resp
       .status(500)
       .json({ error: "Ocorreu um erro ao atualizar o usuário" });
+  }
+};
+
+controller.deleteEmployee = async (req, resp) => {
+  const { employeeId } = req.params;
+  const { userId } = await employeeSchema.findById(employeeId);
+  try {
+    if (userId) {
+      deactivateUser(userId);
+      resp.status(200).json({ success: "Funcionário deletado com sucesso" });
+    } else {
+      return { error: "Funcionário não encontrado" };
+    }
+  } catch (error) {
+    console.log(error);
+    return resp.status(500).json({ error: "Ocorreu um erro inesperado" });
   }
 };
 

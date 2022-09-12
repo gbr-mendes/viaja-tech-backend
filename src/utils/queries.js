@@ -56,8 +56,10 @@ utils.queryBuilderBasedOnUser = async (baseQuery, userFields) => {
     baseQuery.map(async (item) => {
       const { userId } = item;
       const userData = await UserModel.findById(userId).select(userFields);
-      const result = { ...userData.toObject(), ...item.toObject() };
-      return result;
+      if (userData.isActive) {
+        const result = { ...userData.toObject(), ...item.toObject() };
+        return result;
+      }
     })
   );
   return results;
