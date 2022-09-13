@@ -11,14 +11,14 @@ const getModelCount = async (model) => {
 utils.paginatedQuery = async (
   model,
   route,
-  limit = 5,
+  limit = 200,
   page = 1,
   resp,
   queryFields,
   queryBuilder = null,
   userFields
 ) => {
-  const total = await getModelCount(model);
+  const total = await model.count();
   const results = {};
   results.next = null;
 
@@ -43,7 +43,7 @@ utils.paginatedQuery = async (
         query,
         userFields
           ? userFields
-          : ["-__v", "-password", "-notfications", "-role"]
+          : ["-__v", "-password", "-notfications", "-role", "-_id"]
       )
     : query;
 
@@ -56,13 +56,11 @@ utils.queryBuilderBasedOnUser = async (baseQuery, userFields) => {
     baseQuery.map(async (item) => {
       const { userId } = item;
       const userData = await UserModel.findById(userId).select(userFields);
-      if (userData.isActive) {
-        const result = { ...userData.toObject(), ...item.toObject() };
-        return result;
-      }
+      const result = { ...userData.toObject(), ...item.toObject() };
+      return result;
     })
   );
-  return results;
+  return results.filter((result) => result.isActive);
 };
 
 module.exports = utils;
