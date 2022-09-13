@@ -18,6 +18,7 @@ const clientRoutes = require("./routes/clientsRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
 const packagesRoutes = require("./routes/packageRoutes");
 const checkoutRoutes = require("./routes/checkoutRoutes");
+const businessRoutes = require("./routes/businessRoutes");
 
 const URL_PREFIX = "/api/v1";
 
@@ -27,6 +28,7 @@ app.use(`${URL_PREFIX}/clients`, clientRoutes);
 app.use(`${URL_PREFIX}/employee`, employeeRoutes);
 app.use(`${URL_PREFIX}/packages`, packagesRoutes);
 app.use(`${URL_PREFIX}/checkout`, checkoutRoutes);
+app.use(`${URL_PREFIX}/business`, businessRoutes);
 app.use(
   `${URL_PREFIX}/docs`,
   swaggerUi.serve,
