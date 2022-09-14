@@ -5,7 +5,7 @@ const packageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  shortDescritpion: {
+  shortDescription: {
     type: String,
     required: true,
   },

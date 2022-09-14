@@ -10,10 +10,16 @@ validators.createPackageValidator = Joi.object({
     "string.min": "O campo título precisa de no mínimo 5 caracteres",
     "string.max": "O campo título pode ter no máximo 30 caracteres",
   }),
-  description: Joi.string().min(15).required().messages({
-    "any.required": "O campo descrição é obrigatório ",
+  shortDescription: Joi.string().min(15).required().messages({
+    "any.required": 'O campo "descrição curta" é obrigatório',
+    "string.empty": 'O campo "descrição curta" é obrigatório',
+    "string.min":
+      'O campo "descrição curta" precisa de no mínimo 15 caracteres',
+  }),
+  description: Joi.string().min(50).required().messages({
+    "any.required": 'O campo "descrição" é obrigatório',
     "string.empty": "O campo descrição é obrigatório",
-    "string.min": "O campo descrição precisa de no mínimo 15 caracteres",
+    "string.min": "O campo descrição precisa de no mínimo 50 caracteres",
   }),
   valuePerDay: Joi.number().required().min(200).messages({
     "any.required": 'O campo "valor por dia" é obrigatório',
