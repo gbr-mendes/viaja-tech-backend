@@ -46,7 +46,13 @@ controller.appendDestinationViwed = async (req, resp) => {
   try {
     const { userId, packageId } = req.params;
     const { title: packageTitle } = await packageSchema.findById(packageId);
+    if (!title) {
+      return resp.status(400).json({ error: "Pacote não encontrado" });
+    }
     const user = await userSchema.findById(userId);
+    if (!user) {
+      return resp.status(400).josn({ error: "Usuário não encontrado" });
+    }
     const { role } = user;
 
     if (role == "isLead" || role == "isClient") {
@@ -99,8 +105,7 @@ controller.appendDestinationViwed = async (req, resp) => {
       }
     }
     resp.status(200).json({
-      success:
-        "Visualização ao destino com id id adicionada com sucesso para o usuário logado",
+      success: `Visualização ao destino com id ${packageId} adicionada com sucesso para o usuário ${userId}`,
     });
   } catch (error) {
     console.log(error);
