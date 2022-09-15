@@ -21,20 +21,6 @@ const clientSchema = new mongoose.Schema({
     type: [
       {
         type: String,
-        enum: [
-          "Vale do Silício",
-          "Pequim",
-          "Nova York",
-          "Xangai",
-          "Tel Aviv",
-          "Estocolmo",
-          "São Paulo",
-          "Porto Digital",
-          "Serratec",
-          "Florianópolis",
-          "San Pedro Valley",
-          "Campinas",
-        ],
       },
     ],
     required: true,
