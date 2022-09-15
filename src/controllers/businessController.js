@@ -46,7 +46,7 @@ controller.appendDestinationViwed = async (req, resp) => {
   try {
     const { userId, packageId } = req.params;
     const { title: packageTitle } = await packageSchema.findById(packageId);
-    if (!title) {
+    if (!packageTitle) {
       return resp.status(400).json({ error: "Pacote não encontrado" });
     }
     const user = await userSchema.findById(userId);
