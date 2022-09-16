@@ -13,7 +13,7 @@ const clientSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  websiteVisites: {
+  websiteVisits: {
     type: Number,
     default: 1,
   },

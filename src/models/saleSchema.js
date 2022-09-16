@@ -9,6 +9,14 @@ const saleSchema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
+  qtdDays: {
+    type: Number,
+    default: 1,
+  },
+  purchaseValue: {
+    type: Number,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now(),
