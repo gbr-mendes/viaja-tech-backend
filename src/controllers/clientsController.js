@@ -1,4 +1,5 @@
 const ClientModel = require("../models/clientSchema");
+const UserModel = require("../models/userSchema");
 const { paginatedQuery, queryBuilderBasedOnUser } = require("../utils/queries");
 
 const controller = {};
@@ -27,7 +28,7 @@ controller.getClients = async (req, resp) => {
 controller.getClientById = async (req, resp) => {
   const { clientId } = req.params;
   try {
-    const client = await LeadModel.findById(clientId);
+    const client = await ClientModel.findById(clientId);
     if (!client) {
       return resp.status(404).json({ error: "Client not found" });
     }
@@ -38,7 +39,7 @@ controller.getClientById = async (req, resp) => {
       "cpf",
       "phone",
     ]);
-    const payload = { ...lead.toObject(), ...userData.toObject() };
+    const payload = { ...client.toObject(), ...userData.toObject() };
     resp.status(200).json(payload);
   } catch (err) {
     console.log(err);
