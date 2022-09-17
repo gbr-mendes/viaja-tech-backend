@@ -41,9 +41,7 @@ utils.paginatedQuery = async (
   results.results = queryBuilder
     ? await queryBuilder(
         query,
-        userFields
-          ? userFields
-          : ["-__v", "-password", "-notfications", "-role", "-_id"]
+        userFields ? userFields : ["-__v", "-password", "-role", "-_id"]
       )
     : query;
 
