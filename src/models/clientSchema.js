@@ -17,6 +17,26 @@ const clientSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  destinationsViewed: {
+    type: [
+      {
+        type: Object,
+
+        package: {
+          type: String,
+        },
+        tdViews: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+    default: [],
+  },
+  mostViewedDestination: {
+    type: String,
+    default: "",
+  },
   destinationsVisited: {
     type: [
       {

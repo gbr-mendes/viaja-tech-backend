@@ -22,11 +22,18 @@ controller.checkOut = async (req, resp) => {
     const sale = await SaleModel.create(saleData);
     if (sale) {
       if (role == "isLead") {
-        const { websiteVisits, _id: leadId } = await leadSchema.findOne({
+        const {
+          websiteVisits,
+          destinationsViewed,
+          mostViewedDestination,
+          _id: leadId,
+        } = await leadSchema.findOne({
           userId,
         });
         const clientData = {
           userId,
+          destinationsViewed,
+          mostViewedDestination,
           spending: purchaseValue,
           websiteVisits,
           destinationsVisited: [packageTitle],
