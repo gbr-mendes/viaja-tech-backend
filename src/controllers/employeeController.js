@@ -108,7 +108,7 @@ controller.getEmployeeById = async (req, resp) => {
     const { userId } = employee;
     const userData = await userSchema
       .findById(userId.toString())
-      .select(["-__v", "-password", "-notfications", "-role", "-_id"]);
+      .select(["-__v", "-password", "-notifications", "-role", "-_id"]);
     const payload = { ...employee.toObject(), ...userData.toObject() };
     return resp.json(payload);
   } catch (err) {
